@@ -198,18 +198,21 @@ int main(){
     }
 
     fstream binFile;
-    binFile.open("tracks.bin", ios::in | ios::binary);
+    binFile.open("tracks.bin", ios::in | ios::out | ios::binary);
+
     if(binFile.is_open()){
-        Track trackT;
-        Track_Read(track,binFile);
-        Imprime_Track(trackT);
-        cout << "Leitura de track depois do bin: " << endl;
-        binFile.close();
+        Track_Save(track,binFile);
     }
     else{
         cout << "Erro ao abrir arquivo bin";
         exit(2);
     }
 
+    Track trackT;
+    Track_Read(track,binFile);
+    cout << "Leitura de track depois do bin: " << endl;
+    Imprime_Track(trackT);
+    binFile.close();
+    
     return 0;
 }
