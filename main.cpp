@@ -18,7 +18,7 @@ struct Artista
 };
 
 
-void Artista_Save(Artista &art, fstream &fileOut) 
+void artista_Save(Artista &art, ofstream &fileOut) 
 {
     fileOut.write(art.id, sizeof(art.id));
     fileOut.write((char*)&art.followers, sizeof(art.followers));
@@ -26,19 +26,29 @@ void Artista_Save(Artista &art, fstream &fileOut)
     fileOut.write((char*)&art.popularity, sizeof(art.popularity));
 }
 
-void Artista_Read(Artista &art, fstream &fileOut){
-    fileOut.read(art.id, sizeof(art.id));
-    fileOut.read((char*)&art.followers, sizeof(art.followers));
-    fileOut.read(art.name, sizeof(art.name));
-    fileOut.read((char*)&art.popularity, sizeof(art.popularity));
+void artista_Read(Artista &art, ifstream &fileI)
+{
+    Artista artR;
+
+    fileI.read(artR.id, sizeof(art.id));
+    fileI.read((char*)&artR.followers, sizeof(art.followers));
+    fileI.read(artR.name, sizeof(art.name));
+    fileI.read((char*)&artR.popularity, sizeof(art.popularity));
+
+    cout << "\nLendo dados de arquivo binario: " << endl;
+    cout << "id: " << artR.id << endl;
+    cout << "followers: " <<  artR.followers << endl;
+    cout << "name: " << artR.name << endl;
+    cout << "popularity: " << artR.popularity << endl << endl;
 }
 
-void Imprime_Artista(Artista &art)
+void imprime_Artista(Artista &art)
 {
-    cout << art.id << endl;
-    cout << art.name << endl;
-    cout << art.popularity << endl;
-    cout << art.followers << endl;
+    cout << "\nLendo dados de struct Artista: " << endl;
+    cout << "id: " << art.id << endl;
+    cout << "followers: " <<  art.followers << endl;
+    cout << "name: " << art.name << endl;
+    cout << "popularity: " << art.popularity << endl << endl;
 }
 
 int main()
@@ -49,7 +59,8 @@ int main()
     Artista art1;
 
 
-    if(fileIn.is_open()){
+    if(fileIn.is_open())
+    {
         string tmp;
 
         getline(fileIn, tmp, ',');
@@ -59,9 +70,6 @@ int main()
         //strcpy(art1.followers, tmp.c_str());
         art1.followers = atof(tmp.c_str());
 
-        cout << "*******" << tmp.c_str() << endl;
-        cout << "*******" << art1.followers << endl;
-
         getline(fileIn, tmp, ',');
         strcpy(art1.name, tmp.c_str());
 
@@ -69,7 +77,7 @@ int main()
         //strcpy(art1.popularity, tmp.c_str());
         art1.popularity = atoi(tmp.c_str());
 
-        Imprime_Artista(art1);
+        imprime_Artista(art1);
 
         fileIn.close();
     }
@@ -80,12 +88,12 @@ int main()
     } 
 
     //pega o q tá no struct e salva em arquivo binário
-    fstream fileOut;
+    ofstream fileOut;
     fileOut.open("artistas.bin", ios::out | ios::binary); 
 
     if(fileOut.is_open())
     {
-        Artista_Save(art1, fileOut);
+        artista_Save(art1, fileOut);
         fileOut.close();
     }
     else
@@ -94,22 +102,13 @@ int main()
         exit(1);
     } 
 
-    //lê o que tá no arquivo binário artistas.dat
-    fstream fileI;
+    //lê o que tá no arquivo binário artistas.bin
+    ifstream fileI;
     fileI.open("artistas.bin", ios::in | ios::binary);
 
     if(fileI.is_open())
     {
-        Artista art;
-
-        Artista_Read(art, fileI);
-
-        cout << "\nLendo dados no arquivo em binario: " << endl;
-        cout << "id: " << art.id << endl;
-        cout << "followers: " << art.followers << endl;
-        cout << "name: " << art.name << endl;
-        cout << "popularity: " << art.popularity << endl;
-
+        artista_Read(art1, fileI);
         fileI.close();
     }
     else
