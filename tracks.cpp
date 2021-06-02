@@ -49,7 +49,8 @@ struct Track
     int timeSignature;
 };
 
-void Track_Save(Track &track, fstream &file){
+void Track_Save(Track &track, ofstream &file)
+{
     file.write(track.id, sizeof(track.id));
     file.write(track.name, sizeof(track.name));
     file.write((char*)&track.popularity, sizeof(track.popularity));
@@ -72,55 +73,62 @@ void Track_Save(Track &track, fstream &file){
     file.write((char*)&track.timeSignature, sizeof(track.timeSignature));
 }
 
-void Track_Read(Track &track, fstream &file){
-    file.read(track.id, sizeof(track.id));
-    file.read(track.name, sizeof(track.name));
-    file.read((char*)&track.popularity, sizeof(track.popularity));
-    file.read((char*)&track.duration, sizeof(track.duration));
-    file.read((char*)&track.explicitt, sizeof(track.explicitt));
-    file.read(track.artist, sizeof(track.artist));
-    file.read(track.idArtist, sizeof(track.idArtist));
-    file.read(track.releaseDate, sizeof(track.releaseDate));
-    file.read((char*)&track.danceability, sizeof(track.danceability));
-    file.read((char*)&track.energy, sizeof(track.energy));
-    file.read((char*)&track.key, sizeof(track.key));
-    file.read((char*)&track.loudness, sizeof(track.loudness));
-    file.read((char*)&track.mode, sizeof(track.mode));
-    file.read((char*)&track.speechiness, sizeof(track.speechiness));
-    file.read((char*)&track.acousticness, sizeof(track.acousticness));
-    file.read((char*)&track.instrumentalness, sizeof(track.instrumentalness));
-    file.read((char*)&track.liveness, sizeof(track.liveness));
-    file.read((char*)&track.valence, sizeof(track.valence));
-    file.read((char*)&track.tempo, sizeof(track.tempo));
-    file.read((char*)&track.timeSignature, sizeof(track.timeSignature));
+Track* Track_Read(ifstream &file)
+{
+    Track *trackRead = new Track();
+
+    file.read(trackRead->id, sizeof(trackRead->id));
+    file.read(trackRead->name, sizeof(trackRead->name));
+    file.read((char*)&trackRead->popularity, sizeof(trackRead->popularity));
+    file.read((char*)&trackRead->duration, sizeof(trackRead->duration));
+    file.read((char*)&trackRead->explicitt, sizeof(trackRead->explicitt));
+    file.read(trackRead->artist, sizeof(trackRead->artist));
+    file.read(trackRead->idArtist, sizeof(trackRead->idArtist));
+    file.read(trackRead->releaseDate, sizeof(trackRead->releaseDate));
+    file.read((char*)&trackRead->danceability, sizeof(trackRead->danceability));
+    file.read((char*)&trackRead->energy, sizeof(trackRead->energy));
+    file.read((char*)&trackRead->key, sizeof(trackRead->key));
+    file.read((char*)&trackRead->loudness, sizeof(trackRead->loudness));
+    file.read((char*)&trackRead->mode, sizeof(trackRead->mode));
+    file.read((char*)&trackRead->speechiness, sizeof(trackRead->speechiness));
+    file.read((char*)&trackRead->acousticness, sizeof(trackRead->acousticness));
+    file.read((char*)&trackRead->instrumentalness, sizeof(trackRead->instrumentalness));
+    file.read((char*)&trackRead->liveness, sizeof(trackRead->liveness));
+    file.read((char*)&trackRead->valence, sizeof(trackRead->valence));
+    file.read((char*)&trackRead->tempo, sizeof(trackRead->tempo));
+    file.read((char*)&trackRead->timeSignature, sizeof(trackRead->timeSignature));
+
+    return trackRead;
 }
 
-void Imprime_Track(Track &track){
-    cout << "Id: " << track.id << endl;
-    cout << "Name: " << track.name << endl;
-    cout << "Popularity: " << track.popularity << endl;
-    cout << "Duration: " << track.duration << endl;
-    cout << "Explicit: " << track.explicitt << endl;
-    cout << "Artist: " << track.artist << endl;
-    cout << "Id artist: " << track.idArtist << endl;
-    cout << "Release date: " << track.releaseDate << endl;
-    cout << "Danceability: " << track.danceability << endl;
-    cout << "Energy: " << track.energy << endl;
-    cout << "Key: " << track.key << endl;
-    cout << "Loudness: " << track.loudness << endl;
-    cout << "Mode: " << track.mode << endl;
-    cout << "Speechiness: " << track.speechiness << endl;
-    cout << "Acousticness: " << track.acousticness << endl;
-    cout << "Instrumentalness: " << track.instrumentalness << endl;
-    cout << "Liveness: " << track.liveness << endl;
-    cout << "Valence: " << track.valence << endl;
-    cout << "Tempo: " << track.tempo << endl;
-    cout << "Time signature: " << track.timeSignature << endl;
+void Imprime_Track(Track *track)
+{
+    cout << "\nLendo da struct Track: " << endl;
+    cout << "Id: " << track->id << endl;
+    cout << "Name: " << track->name << endl;
+    cout << "Popularity: " << track->popularity << endl;
+    cout << "Duration: " << track->duration << endl;
+    cout << "Explicit: " << track->explicitt << endl;
+    cout << "Artist: " << track->artist << endl;
+    cout << "Id artist: " << track->idArtist << endl;
+    cout << "Release date: " << track->releaseDate << endl;
+    cout << "Danceability: " << track->danceability << endl;
+    cout << "Energy: " << track->energy << endl;
+    cout << "Key: " << track->key << endl;
+    cout << "Loudness: " << track->loudness << endl;
+    cout << "Mode: " << track->mode << endl;
+    cout << "Speechiness: " << track->speechiness << endl;
+    cout << "Acousticness: " << track->acousticness << endl;
+    cout << "Instrumentalness: " << track->instrumentalness << endl;
+    cout << "Liveness: " << track->liveness << endl;
+    cout << "Valence: " << track->valence << endl;
+    cout << "Tempo: " << track->tempo << endl;
+    cout << "Time signature: " << track->timeSignature << endl << endl;
 }
 
-int main(){
-
-    fstream srcFile;
+int main()
+{
+    ifstream srcFile;
     srcFile.open("tracks.csv");
     Track track;
 
@@ -187,32 +195,51 @@ int main(){
         track.timeSignature = atoi(temp.c_str());
 
         srcFile.close();
+
         cout << "Leitura de track: " << endl;
-        Imprime_Track(track);
+        Imprime_Track(&track);
         cout << endl;
     }
-
-    else{
+    else
+    {
         cout << "Erro ao abrir o arquivo";
         exit(1);
     }
 
-    fstream binFile;
-    binFile.open("tracks.bin", ios::in | ios::out | ios::binary);
+    //salva dados de objeto da struct track e aramzena em tracks.bin em binário
+    ofstream binFile;
+    binFile.open("tracks.bin", ios::out | ios::binary);
 
-    if(binFile.is_open()){
+    if(binFile.is_open())
+    {
         Track_Save(track,binFile);
+        binFile.close();
     }
-    else{
+    else
+    {
         cout << "Erro ao abrir arquivo bin";
         exit(2);
     }
 
-    Track trackT;
-    Track_Read(track,binFile);
-    cout << "Leitura de track depois do bin: " << endl;
-    Imprime_Track(trackT);
-    binFile.close();
+    //lê de arquivo binário e salva em objeto da struct Track
+    ifstream binFileRead;
+    binFileRead.open("tracks.bin", ios::in | ios::binary);
+
+    if(binFileRead.is_open())
+    {
+        Track *trackR;
+
+        trackR = Track_Read(binFileRead);
+        cout << "Leitura de track depois do bin: " << endl;
+        Imprime_Track(trackR);
+        binFile.close();
+        delete trackR;
+    }
+    else
+    {
+        cout << "Erro ao abrir arquivo bin";
+        exit(2);
+    }
     
     return 0;
 }
